@@ -21,22 +21,6 @@ const personGenerator = {
         }
     }`,
 
-    patronymicJson: `{
-        "count": 10,
-        "list": {
-            "id_1": "Владимиров",
-            "id_2": "Алексеев",
-            "id_3": "Сергеев",
-            "id_4": "Петров",
-            "id_5": "Андреев",
-            "id_6": "Михайлов",
-            "id_7": "Иванов",
-            "id_8": "Александров",
-            "id_9": "Анатольев",
-            "id_10": "Петров"
-        }
-    }`,
-
     firstNameMaleJson: `{
         "count": 10,
         "list": {     
@@ -133,10 +117,24 @@ const personGenerator = {
     },
 
     randomPatronymicName: function() {
+        let patronymicName = this.randomValue(this.firstNameMaleJson);        
         if (this.person.gender == 'мужчина,') {
-            return this.randomValue(this.patronymicJson) + "ич";
-        } else {
-            return this.randomValue(this.patronymicJson) + "на";
+            if (patronymicName.endsWith("й")) {
+                return patronymicName.substring(0, patronymicName.length-1) + "евич";
+            } if (patronymicName == ("Никита")) { // указал имя полностью, т.к. имя Никита является исключением из правила про безударные гласные а, у, ы в конце имени, согласно, которому должно добавляться "ович" в конце. Чтобы в будущем функция правильно работала и с другими именами заканчивающимися на эти гласные. 
+                return patronymicName.substring(0, patronymicName.length-1) + "ич";
+            } else {
+                return patronymicName + "ович";
+            }
+        }
+        if (this.person.gender == 'женщина,') {
+            if (patronymicName.endsWith("й")) {
+                return patronymicName.substring(0, patronymicName.length-1) + "евна";
+            } if (patronymicName == ("Никита")) {
+                return patronymicName.substring(0, patronymicName.length-1) + "ична";
+            } else {
+                return patronymicName + "овна";
+            }
         }
     },
     
